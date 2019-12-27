@@ -1,5 +1,10 @@
 class NextPlugin:
-    def want_to_respond_to(self, message):
+    def __init__(self, client):
+        self.client = client
+        self.priority = 0
+        self.allow_others = False
+
+    def wants_to_respond(self, message):
         return False
 
     def get_response(self, message):

@@ -1,5 +1,4 @@
 import discord
-import yaml
 import random
 import os
 
@@ -7,28 +6,14 @@ from plugins import *
 
 class Tokusentai(discord.Client):
     last_channel = None
-    simple_messages = {}
-    fuzzy_messages = {}
-    direct_messages = {}
     plugins = []
 
     async def on_ready(self):
-        with open('simple-messages.yml') as stream:
-            self.simple_messages = yaml.load(stream)
-        with open('simple-fuzzy-messages.yml') as stream:
-            self.fuzzy_messages = yaml.load(stream)
-        with open('simple-direct-messages.yml') as stream:
-            self.direct_messages = yaml.load(stream)
-
-        # get all files in plugins folder
-        # replace .py with () in order to use it as object creators
-        # evaluate class names from strings to objects
-        # turn the map into a list
         self.plugins = list(
             map(
-                lambda func: eval(func),
+                lambda func: eval(func, None, dict(self=self)),
                 map(
-                    lambda filename: filename.replace('.py', '()'),
+                    lambda filename: filename.replace('.py', '(self)'),
                     os.listdir('./plugins')
                 )
             )
@@ -45,16 +30,26 @@ class Tokusentai(discord.Client):
         if self.user.id == message.author.id:
             return
 
-        response = None
+        response = ''
 
-        print(len(self.plugins))
-        for plugin in self.plugins:
-            print(plugin.get_response(message))
-            if plugin.want_to_respond_to(message):
-                response = self.get_string_response(plugin.get_response(message))
+        plugins = sorted(
+            list(
+                filter(
+                    lambda plugin: plugin.wants_to_respond(message),
+                    self.plugins
+                )
+            ),
+            key=lambda plugin: plugin.priority
+        )
 
-        if not response:
-            response = self.get_response(message)
+        if not plugins:
+            plugins = []
+
+        for plugin in plugins:
+            if plugin.wants_to_respond(message):
+                response = response + '\n' + self.get_string_response(plugin.get_response(message))
+                if not plugin.allow_others:
+                    break
 
         if len(response) > 0:
             return await message.channel.send(response)
@@ -83,20 +78,3 @@ class Tokusentai(discord.Client):
                 if selected <= 0:
                     return possible_response
             return response
-
-    def get_response(self, message):
-        response = None
-        if message.content.startswith('<@!{0.id}>' . format(self.user)):
-            response = self.direct_messages[self.remove_mention(message.content)]
-
-        if message.content in self.simple_messages:
-            response = self.simple_messages[message.content]
-
-        for trigger in self.fuzzy_messages:
-            if trigger in message.content:
-                response = self.fuzzy_messages[trigger]
-
-        return self.get_string_response(response)
-
-    def remove_mention(self, text):
-        return text.replace('<@!{0.id}> ' . format(self.user), '').strip()
