@@ -1,6 +1,5 @@
 class NextPlugin:
     def __init__(self, client):
-        self.client = client
         self.priority = 0
         self.allow_others = False
 
