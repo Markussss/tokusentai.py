@@ -1,7 +1,7 @@
-class MyPlugin:
+class $name:
     def __init__(self, client):
-        self.priority = 0
-        self.allow_others = True
+        self.priority = $priority
+        self.allow_others = $allow_others
 
     def wants_to_respond(self, message):
         """
@@ -19,4 +19,4 @@ class MyPlugin:
         The message response we want to send, based on the
         current message.
         """
-        return 'Hello world!'
+        return 'Hello world from $name!'
