@@ -2,7 +2,7 @@ import os
 from string import Template
 
 plugin_name=input('Select a name for the plugin: ')
-plugin_priority=input('Which priority should this plugin have? (default: 0)')
+plugin_priority=input('Which priority should this plugin have? (default: 0) ')
 plugin_allow_others=input('Should this plugin block other plugins from running? [y/N] ')
 
 if not plugin_priority:
@@ -32,3 +32,9 @@ with open('plugin.template', 'r') as plugin_template:
     with open('plugins/{0}/main.py' . format(plugin_name), 'w+') as plugin_file:
         plugin_file.write(plugin)
         plugin_file.close()
+    with open('plugins/{0}/requirements.txt' . format(plugin_name), 'w+') as requirements_file:
+        requirements_file.write(
+            '# specify your required packages here, one per line\n' + \
+            '# lines starting with # will be ignored\n'
+        )
+        requirements_file.close()
