@@ -5,12 +5,13 @@ class YamlPlugin:
         self.priority = 0
         self.allow_others = True
         self.client = client
+
         with open('simple-messages.yml') as stream:
-            self.simple_messages = yaml.load(stream)
+            self.simple_messages = yaml.load(stream, Loader=yaml.FullLoader)
         with open('simple-fuzzy-messages.yml') as stream:
-            self.fuzzy_messages = yaml.load(stream)
+            self.fuzzy_messages = yaml.load(stream, Loader=yaml.FullLoader)
         with open('simple-direct-messages.yml') as stream:
-            self.direct_messages = yaml.load(stream)
+            self.direct_messages = yaml.load(stream, Loader=yaml.FullLoader)
 
     def wants_to_respond(self, message):
         return (
@@ -44,3 +45,6 @@ class YamlPlugin:
             if trigger in message.content:
                 return True
         return False
+
+    def test(self):
+        return 'Test YamlPlugin'

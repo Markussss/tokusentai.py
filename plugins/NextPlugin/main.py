@@ -8,3 +8,6 @@ class NextPlugin:
 
     def get_response(self, message):
         return 'Next'
+
+    def test(self):
+        return 'Test NextPlugin'
