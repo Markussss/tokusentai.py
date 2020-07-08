@@ -17,6 +17,8 @@ def create_plugins():
             plugins = plugins + ''.join(plugin.readlines()) + '\n\n'
         with open('./plugins/{0}/requirements.txt' . format(plugin_folder)) as requirements:
             dependencies = dependencies + requirements.readlines()
+
+    dependencies = list(filter(lambda line: not line.startswith('#'), dependencies))
     install_dependencies(dependencies)
 
     with open('./plugins.py', 'w+') as plugins_file:
