@@ -13,3 +13,6 @@ pip-selfcheck.json
 plugins.py
 .vscode
 .env
+node_modules/
+*.db
+*.db-journal
