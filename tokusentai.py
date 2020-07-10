@@ -7,6 +7,7 @@ from plugins import *
 class Tokusentai(discord.Client):
     last_channel = None
     plugins = []
+    bot_path = os.path.abspath('.')
     plugin_path = os.path.abspath('./plugins')
 
     async def on_ready(self):
@@ -20,8 +21,6 @@ class Tokusentai(discord.Client):
             )
         )
 
-
-
         self.plugins = list(map(
             self.create_instance_of,
             self.plugins
@@ -30,7 +29,11 @@ class Tokusentai(discord.Client):
         print('Logged in {0}' . format(self.user))
 
     def create_instance_of(self, plugin):
-        os.chdir(self.plugin_path + '/' + plugin.__name__)
+        if plugin.provide_files:
+            os.chdir(self.bot_path)
+        else:
+            os.chdir(self.plugin_path + '/' + plugin.__name__)
+        print('Creating a new {0}' . format(plugin))
         return plugin(self)
 
     async def on_message(self, message):

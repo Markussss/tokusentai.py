@@ -1,7 +1,11 @@
-class $name:
+import plugin
+
+class $name(plugin.Plugin):
+    priority = $priority
+    allow_others = $allow_others
+
     def __init__(self, client):
-        self.priority = $priority
-        self.allow_others = $allow_others
+        super().__init__(client)
 
     def wants_to_respond(self, message):
         """

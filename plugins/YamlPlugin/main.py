@@ -1,11 +1,9 @@
 import yaml
+import plugin
 
-class YamlPlugin:
+class YamlPlugin(plugin.Plugin):
     def __init__(self, client):
-        self.priority = 0
-        self.allow_others = True
-        self.client = client
-
+        super().__init__(client)
         with open('simple-messages.yml') as stream:
             self.simple_messages = yaml.load(stream, Loader=yaml.FullLoader)
         with open('simple-fuzzy-messages.yml') as stream:

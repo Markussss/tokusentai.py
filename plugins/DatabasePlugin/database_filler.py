@@ -1,9 +1,6 @@
 import os
 import discord
 import sqlite3
-import logging
-
-logging.basicConfig(level=logging.INFO)
 
 class DatabaseFiller(discord.Client):
     async def on_ready(self):
