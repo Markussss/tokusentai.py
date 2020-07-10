@@ -7,11 +7,13 @@ import markovify
 
 class MarkovChainPlugin(plugin.Plugin):
     provide_files = True
+    passed_messages = 0
 
     def __init__(self, client):
         super().__init__(client)
-        self.models = {}
+        self.generate()
 
+    def generate(self):
         connection = sqlite3.connect('{0}.db' . format(os.getenv('NAME')))
         cursor = connection.cursor()
 
@@ -48,11 +50,15 @@ class MarkovChainPlugin(plugin.Plugin):
         self.model = markovify.Text(text,  well_formed=False)
 
     def wants_to_respond(self, message):
-        return message.content.startswith(os.getenv('NAME'))
+        self.passed_messages += 1
+        return message.content.lower().startswith(os.getenv('NAME'))
 
     def get_response(self, message):
-        start = message.content.replace(os.getenv('NAME'), '').strip().split(' ')[0]
+        start = message.content.lower().replace(os.getenv('NAME'), '').strip().split(' ')[0]
         message = None
+
+        if self.passed_messages > 100:
+            self.generate()
 
         try:
             if start:
