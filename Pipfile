@@ -9,6 +9,7 @@ pylint = "*"
 [packages]
 discord-py = "*"
 pyyaml = "*"
+markovify = "*"
 
 [requires]
 python_version = "3.8"

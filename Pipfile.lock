@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ca66a67473fd6f4f4ba81a7c6009aa647ffc5f4c25f8d3917a9c11589d7090f7"
+            "sha256": "5a980327528b34d650f3ed7d5ca362dc9300258b24369364be1e5d2f8327eaa0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -73,6 +73,13 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.10"
         },
+        "markovify": {
+            "hashes": [
+                "sha256:b5c073ed9a0c61e06a5084bf35b657977fac856da8a72bb491a4da992bd9cecd"
+            ],
+            "index": "pypi",
+            "version": "==0.8.2"
+        },
         "multidict": {
             "hashes": [
                 "sha256:1ece5a3369835c20ed57adadc663400b5525904e53bae59ec854a5d36b39b21a",
@@ -112,6 +119,13 @@
             ],
             "index": "pypi",
             "version": "==5.3.1"
+        },
+        "unidecode": {
+            "hashes": [
+                "sha256:1d7a042116536098d05d599ef2b8616759f02985c85b4fef50c78a5aaf10822a",
+                "sha256:2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8"
+            ],
+            "version": "==1.1.1"
         },
         "websockets": {
             "hashes": [

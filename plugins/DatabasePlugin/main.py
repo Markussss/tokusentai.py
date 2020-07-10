@@ -12,7 +12,7 @@ class DatabasePlugin(plugin.Plugin):
 
 
     def wants_to_respond(self, message):
-        self.cursor.execute('INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT IGNORE', (
+        self.cursor.execute('INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', (
             message.id,
             message.content,
             message.author.id,
