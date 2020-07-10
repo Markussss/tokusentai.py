@@ -30,47 +30,46 @@ class MarkovChainPlugin(plugin.Plugin):
             (r'\n', '. ')
         ]
 
-        for author in cursor.execute('SELECT DISTINCT(author) FROM messages WHERE bot = 0 and ignore = 0').fetchall():
-            text = '. '.join(
-                list(
-                    map(
-                        lambda t: t[0],
-                        cursor
-                            .execute('SELECT message FROM messages WHERE author = ?', (author[0], ))
-                            .fetchall()
-                    )
+        text = '. '.join(
+            list(
+                map(
+                    lambda t: t[0],
+                    cursor
+                        .execute('SELECT message FROM messages WHERE bot = 0 and ignore = 0')
+                        .fetchall()
                 )
             )
-            for pattern in uninteresting_patterns:
-                text = re.sub(pattern, '', text)
+        )
+        for pattern in uninteresting_patterns:
+            text = re.sub(pattern, '', text)
 
-            for (search, replace) in patterns_that_need_improvement:
-                text = re.sub(search, replace, text)
-            self.models[author[0]] = markovify.Text(text,  well_formed=False)
+        for (search, replace) in patterns_that_need_improvement:
+            text = re.sub(search, replace, text)
+        self.model = markovify.Text(text,  well_formed=False)
 
     def wants_to_respond(self, message):
         return message.content.startswith(os.getenv('NAME'))
 
     def get_response(self, message):
-        author = message.author.id
-        while author == message.author.id:
-            author = random.choice(list(self.models))
-
         start = message.content.replace(os.getenv('NAME'), '').strip().split(' ')[0]
         message = None
 
         try:
             if start:
-                message = self.models[author].make_sentence_with_start(start)
+                message = self.model.make_sentence_with_start(start)
 
             if not message:
-                message = self.models[author].make_short_sentence(350)
+                print('could not make message with start {0}' . format(start))
+                message = self.model.make_short_sentence(350)
 
             if not message:
                 return self.get_response(message)
-            return message
+
+            if not message:
+                return ''
         except:
-            message = self.models[author].make_short_sentence(350)
+            print('exception..')
+            message = self.model.make_short_sentence(350)
             if message:
                 return message
             return ''
