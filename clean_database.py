@@ -27,3 +27,47 @@ cursor.execute("""
     UPDATE messages SET ignore = 1 WHERE message NOT LIKE "% % %" AND ignore = 0;
 """)
 
+cursor.execute("""
+--sql
+    UPDATE messages SET ignore = 1 WHERE
+        message LIKE '% a %' AND
+        message NOT LIKE '% hade a %' AND
+        message NOT LIKE '% skjer a %' AND
+        message NOT LIKE '% a ye %' AND
+        ignore = 0
+;
+""")
+
+cursor.execute("""
+--sql
+    UPDATE messages SET ignore = 1 WHERE (
+        message LIKE '% the %' OR
+        message LIKE '% if %' OR
+        message LIKE '% of %' OR
+        message LIKE '% and %' OR
+        message LIKE '% that %' OR
+        message LIKE '% have %' OR
+        message LIKE '% not %' OR
+        message LIKE '% his %' OR
+        message LIKE '% from %' OR
+        message LIKE '% they %' OR
+        message LIKE '% we %' OR
+        message LIKE '% will %' OR
+        message LIKE '% my %' OR
+        message LIKE '% would %' OR
+        message LIKE '% there %' OR
+        message LIKE '% which %' OR
+        message LIKE '% when %' OR
+        message LIKE '% make %' OR
+        message LIKE '% can %' OR
+        message LIKE '% just %' OR
+        message LIKE '% know %' OR
+        message LIKE '% some %' OR
+        message LIKE '% other %' OR
+        message LIKE '% only %' OR
+        message LIKE '% look %'
+    )
+    AND ignore = 0
+;
+""")
+
