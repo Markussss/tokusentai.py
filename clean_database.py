@@ -5,6 +5,7 @@ connection = sqlite3.connect('{0}.db' . format(os.getenv('NAME')))
 cursor = connection.cursor()
 
 ignored_users = os.getenv('IGNORED_USERS', '').split(',')
+ignored_words = os.getenv('IGNORED_WORDS', '').split(',')
 
 cursor.execute("""
 --sql
@@ -14,6 +15,15 @@ UPDATE messages SET ignore = 1 WHERE author IN ({0}) AND ignore = 0
         ('?, ' * (len(ignored_users) - 1)) + '?'
     ),
     ignored_users
+)
+cursor.execute("""
+--sql
+UPDATE messages SET ignore = 1 WHERE ({0}) AND ignore = 0
+;
+""" . format(
+        ('message LIKE ? OR ' * (len(ignored_words) - 1)) + 'message LIKE ?'
+    ),
+    list(map(lambda word: '"%{0}%"' . format (word), ignored_words))
 )
 
 cursor.execute("""
