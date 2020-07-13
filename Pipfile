@@ -13,3 +13,7 @@ markovify = "*"
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+tokusentai = "python main.py"
+clean_database = "python clean_database.py"
